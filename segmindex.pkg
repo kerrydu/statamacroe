@@ -1,0 +1,7 @@
+v 2.0
+d 'segmindex ': Estimate regional market segmentation index
+d 
+d Distribution-Date:   20200806
+d 
+F segmindex.ado   
+F segmindex.sthlp

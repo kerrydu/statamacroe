@@ -1,0 +1,8 @@
+v 2.0
+d 'calk': Calculate capital stock by the perpetual inventory method 
+d 
+d Distribution-Date:   20200806
+d 
+F calk.ado
+F calk.sthlp
+F chaintobase.ado
