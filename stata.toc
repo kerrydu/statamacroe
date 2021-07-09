@@ -4,7 +4,7 @@ d By Kerry Du
 d
 d ^Email:^ kerrydu@xmu.edu.com
 d ^Homepage:^ kerrydu.gitee.io
-p calr      Calculate capital stock by the perpetual inventory method 
+p calk      Calculate capital stock by the perpetual inventory method 
 p calrgdp    Calculate real GDP
 p segmindex   Estimate regional market segmentation index
 p placebosim  Simulation of estimating treatment effect by randomly matching treatment policy with individuals. 
