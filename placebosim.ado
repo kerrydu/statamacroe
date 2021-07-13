@@ -6,6 +6,9 @@ program define placebosim
 	 _on_colon_parse `0'
 
 	local command `"`s(after)'"'
+	_check_cmd `command'
+	local command `"`r(cmd)'"'
+
 	local 0 `"`s(before)'"'
 
 	_parse_policy `0'
@@ -25,6 +28,18 @@ program define placebosim
 
 end
 
+cap program drop  _check_cmd	
+program define _check_cmd,rclass
+	syntax [anything(name=exp_list equalok)]	///
+		[fw iw pw aw] [if] [in],  [*]
+
+	if `"`options'"'==""{
+		return local cmd `0',
+	}
+	else{
+		return local cmd `0'
+	}
+end
 	
 cap program drop  _parse_policy	
 program define _parse_policy,rclass
@@ -36,7 +51,7 @@ program define _parse_policy,rclass
 	return local id `id'
 	return local cmd `cmd'
 end
-
+/*
 cap program drop regcmd	
 program define regcmd,eclass
 	version 14
@@ -69,3 +84,4 @@ program define randpolicy
 	qui getmata   (`policy')= `PP',replace
 	cap mata mata drop `PP' 
 end
+*/
