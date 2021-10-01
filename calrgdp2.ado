@@ -1,9 +1,14 @@
-cap program drop calrgdp
-program define calrgdp, sortpreserve
+cap program drop calrgdp2
+program define calrgdp2, sortpreserve
 	version 14
-	syntax, gdp(varname numeric) gdpindex(varname numeric) gen(string) t(varname) [id(varname) base(numlist max=1) Accumulate]
+	syntax, gdp(varname numeric) gdpindex(varname numeric) gen(string) t(varname) [id(varname) base(numlist max=1)]
 	tempvar gdpindex2 baseindex
     qui gen double  `gdpindex2'=`gdpindex'	
+    qui su `gdpindex'
+    local rmax=r(max)
+    if `rmax'<100{
+    	di as red "Warning: gdpindex should be last_year=100"
+    }
 
 	if "`id'"==""{
 		sort `t'
@@ -14,14 +19,13 @@ program define calrgdp, sortpreserve
         	di as error "base(`base') is not in t(`t')."
         	exit 198
         }
-		if `"`accumulate'"'==""{
-			qui replace `gdpindex2'=100 if _n==1
-			qui replace `gdpindex2'=`gdpindex2'[_n-1]*`gdpindex'/100 if _n>1
-		}
-		su `gdpindex2' if `t'==`base',meanonly
-		qui gen `baseindex' = r(mean)
-		qui replace `gdpindex2'=`gdpindex2'/`baseindex'
-		qui gen double `gen'=`gdp'[`n']*`gdpindex2'			
+		
+		qui replace `gdpindex2'=100 if `t'==`base'
+		qui replace `gdpindex2'=`gdpindex2'[_n-1]*`gdpindex'/100 if `t'>`base'
+        qui replace `gdpindex2'=100/`gdpindex'[_n+1]*100 if `t'<`base'
+        gsort -`t'
+        qui replace `gdpindex2'=`gdpindex2'*`gdpindex2'[_n-1]/100 if `t'<`base'
+		qui gen double `gen'=`gdp'[`n']*`gdpindex2'/100			
 	}
 	else{
 	
@@ -41,15 +45,14 @@ program define calrgdp, sortpreserve
         	di as error "base(`base') is not in t(`t')."
         	exit 198
         }		
-		if `"`accumulate'"'==""{
-			qui bys `id' (`t'): replace `gdpindex2'=100 if _n==1
-			qui bys `id' (`t'): replace `gdpindex2'=`gdpindex2'[_n-1]*`gdpindex'/100 if _n>1
-		}
-		tempvar baseindex2
-		qui bys `id' (`t'): egen `baseindex2' = mean(`gdpindex2') if `t'==`base'
-		qui bys `id' (`t'): egen `baseindex' = total(`baseindex2') 
-		qui bys `id' (`t'): replace `gdpindex2'=`gdpindex2'/`baseindex'
-		qui bys `id' (`t'): gen double `gen'=`gdp'[`n']*`gdpindex2'			
+	
+		qui replace `gdpindex2'=100 if `t'==`base'
+		qui bys `id' (`t'): replace `gdpindex2'=`gdpindex2'[_n-1]*`gdpindex'/100 if `t'>`base'
+		qui bys `id' (`t'): replace `gdpindex2'=100/`gdpindex'[_n+1]*100 if `t'<`base'
+		tempvar tdec 
+		qui gen `tdec' = -`t'
+		qui bys `id' (`tdec'): replace `gdpindex2'=`gdpindex2'*`gdpindex2'[_n-1]/100 if `t'<`base'
+		qui bys `id' (`t'): gen double `gen'=`gdp'[`n']*`gdpindex2'/100			
 		
 	}
 	
