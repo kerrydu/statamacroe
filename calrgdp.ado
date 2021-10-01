@@ -8,7 +8,7 @@ program define calrgdp, sortpreserve
 	if "`id'"==""{
 		sort `t'
 		if "`base'"=="" local base = `t'[1]
-        rownum `t', index(`base')
+        qui rownum `t', index(`base')
         local n = r(rownum)
         if `"`n'"'==""{
         	di as error "base(`base') is not in t(`t')."
@@ -32,9 +32,9 @@ program define calrgdp, sortpreserve
 			noi display as error "{bf:calrgdp} needs strongly balanced panel, use {bf:tsfill, full} to rectangularize your data."
 			exit            
 		}		
-		sort `t'
+		sort `id' `t'
 		if "`base'"=="" local base = `t'[1]
-		rownum `t', index(`base')
+		qui rownum `t', index(`base')
 		local ns = r(rownum)
 		gettoken n ns:ns
         if `"`n'"'==""{
