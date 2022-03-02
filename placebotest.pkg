@@ -1,0 +1,7 @@
+v 2.0
+d 'placebotest:  Simulation of estimating treatment effect by randomly matching treatment policy with individuals. 
+d 
+d Distribution-Date:   20220302
+d 
+F placebotest.ado
+F placebotest.sthlp
