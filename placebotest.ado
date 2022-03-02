@@ -4,6 +4,13 @@ cap program drop placebotest
 program define placebotest
 	
 	version 14
+	cap which moremata
+	if _rc{
+		cap ssc install moremata
+		if _rc cnssc install moremata
+	}
+
+
 	 _on_colon_parse `0'
 
 	local command `"`s(after)'"'
