@@ -4,12 +4,6 @@ cap program drop placebotest
 program define placebotest
 	
 	version 14
-	cap which moremata
-	if _rc{
-		cap ssc install moremata
-		if _rc cnssc install moremata
-	}
-
 
 	 _on_colon_parse `0'
 
@@ -18,7 +12,7 @@ program define placebotest
 	local 0 `"`s(before)'"'
 
 	_parse_policy `0'
-	local id `"`r(id)'"'
+	local cluster `"`r(cluster)'"'
 	local policy `"`r(policy)'"'
 	local cmd `"`r(cmd)'"'
 	local tvar `"`r(tvar)'"'
@@ -36,7 +30,8 @@ program define placebotest
 		local k=`k'+1
 		local b`k' `r(b`k')'		
 	}
-	
+	tempvar id
+	qui egen `id' =group(`cluster')	
 	sort `id' `tvar'
 	tempname XX PP ball ball2
 	qui putmata `XX' = (`policy'),replace
@@ -77,12 +72,12 @@ cap program drop  _parse_policy
 program define _parse_policy,rclass
 	syntax [anything(name=exp_list equalok)]	///
 		[fw iw pw aw] [if] [in], policy(varlist) ///
-		id(varname) tvar(varname) ///
+		cluster(varlist) tvar(varname) ///
 		[seed(numlist max=1) reps(integer 200)]
 	tokenize `"`0'"', p(",")
 	local cmd `1'
 	return local policy `policy'
-	return local id `id'
+	return local cluster `cluster'
 	return local tvar `tvar'
 	return local cmd `cmd'
 	return local seed `seed'
@@ -193,7 +188,7 @@ real matrix function fillpanel(real matrix data0)
 	x1=balancedata[,1..2] 
 	// use the first obs in id-t group
 	x2=x1[rows(x1),.] \ x1[1::(rows(x1)-1),.]
-	balancedata,x2
+	//balancedata,x2
 	fdata=select(balancedata,rowsum(x1:==x2):!=cols(x1))
 	data1=fdata[.,1..(c-1)]
 	return(data1)	

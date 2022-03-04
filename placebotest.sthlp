@@ -14,13 +14,13 @@ help for {hi:placebotest}
 {p 8 17 2}
 {cmd:placebotest}
         [{it:{help exp_list}}]
-        {cmd:,} {opt id(varname)} {opt tvar(varname)} policy(varlist) [{opt seed(#)} {opt r:eps(#)}]
+        {cmd:,} {opt cluster(varlist)} {opt tvar(varname)} policy(varlist) [{opt seed(#)} {opt r:eps(#)}]
         {cmd::} {it:command}
 
 {synoptset 21}{...}
 {synopt:{it:options}}Description{p_end}
 {synoptline}
-{synopt:{opt id(varname)}}specify the id variable{p_end}
+{synopt:{opt cluster(varlist)}}specify randomizing the policy by clusters{p_end}
 {synopt:{opt tvar(varname)}}specify the time variable{p_end}
 {synopt:{opt policy(varlist)}}speicify the treatment variables{p_end}
 {synopt:{opt reps(#)}}set replication number to {it:#} {p_end}
@@ -52,7 +52,7 @@ Perform DID regression:
 Perform the placebo experiment 1000 times:
 
 {phang}
-{cmd:. placebotest b=_b[did], reps(1000) id(id) policy(did) tvar(appyear): xi:xtreg number did i.appyear,fe}
+{cmd:. placebotest b=_b[did], reps(1000) cluster(id) policy(did) tvar(appyear): xi:xtreg number did i.appyear,fe}
 {p_end}
 
 {hline}
