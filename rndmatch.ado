@@ -97,6 +97,7 @@ real matrix function mergem1(real matrix data,real rowvector s1,real matrix x2)
 }
 
 
+
 real matrix function mergem12(real matrix x1, real matrix x2)
 {
 	
@@ -105,8 +106,8 @@ real matrix function mergem12(real matrix x1, real matrix x2)
 	rx2=rows(x2)
     mdata= J(rows(x1),c,.)
     udata= x2[.,(cols(x1)+1)..cols(x2)]
-    for(i=1;i<=length(x2);i++){
-    	flag= mm_which(rowsum(x1-J(r,1,x2[i,1..cols(x1)])):==0)
+    for(i=1;i<=rows(x2);i++){
+    	flag= mm_which(rowsum(x1:==J(r,1,x2[i,1..cols(x1)])):==cols(x1))
     	if(length(flag)){
     	  mdata[flag,.]=J(length(flag),1,udata[i,.])
     	}  	
