@@ -66,6 +66,7 @@ void function _randpolicy(string scalar data)
 }
 
 
+
 real matrix function mergem1(real matrix data,real rowvector s1,real matrix x2)
 {
 	x1=data[.,s1]
@@ -78,6 +79,10 @@ real matrix function mergem1(real matrix data,real rowvector s1,real matrix x2)
 	pos1=mm_which(rowsum(id1:==id2):!=cols(id1))
 	// 最大的组数
 	n=max(pos1[2::length(pos1)]-pos1[1::(length(pos1)-1)])
+	if(n>rows(x2)){ //reduce # of loop
+		return(mergem12(x1,x2))
+		exit()
+	}
 	pos = mm_which(rowsum(id1:==id2):==cols(id1))
 	//id1,id2
 	//pos
@@ -90,6 +95,27 @@ real matrix function mergem1(real matrix data,real rowvector s1,real matrix x2)
 	xx =xx[.,1..(cols(xx)-1)]
 	return(xx)	
 }
+
+
+real matrix function mergem12(real matrix x1, real matrix x2)
+{
+	
+	c = cols(x2)-cols(x1)
+	r = rows(x1)
+	rx2=rows(x2)
+    mdata= J(rows(x1),c,.)
+    udata= x2[.,(cols(x1)+1)..cols(x2)]
+    for(i=1;i<=length(x2);i++){
+    	flag= mm_which(rowsum(x1-J(r,1,x2[i,1..cols(x1)])):==0)
+    	if(length(flag)){
+    	  mdata[flag,.]=J(length(flag),1,udata[i,.])
+    	}  	
+    }
+    xxx=(x1,mdata)
+	return(xxx)	
+}
+
+
 
 
 real matrix function fillpanel(real matrix data0)

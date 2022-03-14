@@ -186,7 +186,7 @@ real matrix function mergem12(real matrix x1, real matrix x2)
 	c = cols(x2)-cols(x1)
 	r = rows(x1)
 	rx2=rows(x2)
-    mdata= J(rows(id1),c,.)
+    mdata= J(rows(x1),c,.)
     udata= x2[.,(cols(x1)+1)..cols(x2)]
     for(i=1;i<=length(x2);i++){
     	flag= mm_which(rowsum(x1-J(r,1,x2[i,1..cols(x1)])):==0)
