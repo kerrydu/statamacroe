@@ -12,7 +12,7 @@ help for {hi:permute2}
 {title:Syntax}
 
 {p 8 17 2}
-{cmd:placebosim}
+{cmd:permute2}
         [{it:{help exp_list}}]
         {cmd:,} {opt cluster(varlist)} {opt tvar(varname)} {opt tr:eatment(varlist)} {opt r:eps(#)} [{it:options}]
         {cmd::} {it:command}
