@@ -20,7 +20,7 @@ program define placebosample
 	}
 	else{
 		tempvar id time
-		qui egen `id' = group(`cluetsr')
+		qui egen `id' = group(`cluster')
 		qui egen `time'=group(`tvar')
 	}
 
@@ -32,7 +32,7 @@ program define placebosample
 	qui putmata  id =`id'  time=`time'  vars = (`varlist') if `flag'==1,replace
 	if `"`prefix'"'!=""{
 		foreach v in `varlist'{
-				qui clone `prefix'`v' = `v'
+				qui clonevar `prefix'`v' = `v'
 				local newvars `newvars' `prefix'`v'
 		}
 	}
@@ -56,8 +56,8 @@ void function _randommatching(real colvector posin,
 	                          string scalar  vnames)
 {
 	
-	balancedata = fillpanel((id,time,vars,J(length(id),1,1),))
-	pick=randomcluster(max(id),max(t))
+	balancedata = fillpanel((id,time,vars,J(length(id),1,1)))
+	pick=randomcluster(max(id),max(time))
 	pickdata = select(balancedata[pick,3..(cols(balancedata)-1)],balancedata[.,cols(balancedata)]:==1)
 	st_view(randvars=.,.,vnames)
 	randvars[.,.]=pickdata[posin,.]	//将随机化数据传回stata
@@ -69,7 +69,7 @@ real matrix function fillpanel(real matrix data0)
 	t = uniqrows(data0[.,2])
 	if(rows(data0[.,1])==length(id)*length(t)){
 		return(data0)
-		exit
+		exit()
 	}	
 	c = cols(data0)
 	balancedata= (id#J(length(t),1,1),J(length(id),1,1)#t,J(length(id)*length(t),c-2,.)),J(length(id)*length(t),1,1)	
