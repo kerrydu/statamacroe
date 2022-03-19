@@ -62,7 +62,7 @@ real matrix function fillpanel(real matrix data0)
 	t = uniqrows(data0[.,2])
 	if(rows(data0[.,1])==length(id)*length(t)){
 		return(data0)
-		exit
+		exit()
 	}	
 	c = cols(data0)
 	balancedata= (id#J(length(t),1,1),J(length(id),1,1)#t,J(length(id)*length(t),c-2,.)),J(length(id)*length(t),1,1)	

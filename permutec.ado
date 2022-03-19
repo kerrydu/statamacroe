@@ -18,16 +18,16 @@ program define permutec
 	}
 	else{
 		*tempvar time
-		qui `g'egen=group(`tvar')
+		qui `g'egen `time'=group(`tvar')
 	}
 	*tempvar id 
-	if `"`clusetr'"'==""{
+	if `"`cluster'"'==""{
 		qui gen `id'=_n
 	}
 	else{
 		qui `g'egen `id' = group( `cluster')
 	}
-	qui `g'gen `posin' =group(`id' `time')
+	qui `g'egen `posin' =group(`id' `time')
 	qui `g'sort `posin'
 	qui putmata _posin00 =`posin',replace
 	qui bys `posin' : gen byte `flag' = (_n==1)
@@ -62,7 +62,7 @@ real matrix function fillpanel(real matrix data0)
 	t = uniqrows(data0[.,2])
 	if(rows(data0[.,1])==length(id)*length(t)){
 		return(data0)
-		exit
+		exit()
 	}	
 	c = cols(data0)
 	balancedata= (id#J(length(t),1,1),J(length(id),1,1)#t,J(length(id)*length(t),c-2,.)),J(length(id)*length(t),1,1)	
