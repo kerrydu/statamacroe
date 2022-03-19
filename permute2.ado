@@ -24,9 +24,10 @@ program define permute2
 	qui `g'egen `id' = group( `cluster')
 	qui `g'sort `id' `tvar'
 	tempname temp_frame_placebo
-	qui frame put `id' `tvar' `treatment', into(`temp_frame_placebo')
+	qui bys `id' `tvar' (`treatment'): frame put `id' `tvar' `treatment' if _n==1, ///
+	                                                    into(`temp_frame_placebo')
 	frame `temp_frame_placebo'{
-		qui `g'duplicates drop `id' `tvar', force
+		//qui `g'duplicates drop `id' `tvar', force
 		qui xtset `id' `tvar'
 		qui count  if `id'==`id'[1]
 		local Ntvar = r(N)
